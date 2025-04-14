@@ -3,9 +3,6 @@
 package com.example.myapplication.screen
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,11 +18,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.myapplication.data.Recordatorio
 import com.example.myapplication.navigation.AppScreen
 import com.example.myapplication.ui.theme.RecordatorioCard
 import com.example.myapplication.viewmodel.RecordatorioViewModel
@@ -33,51 +31,55 @@ import com.example.myapplication.viewmodel.RecordatorioViewModel
 @Composable
 fun ListScreen(navController: NavController) {
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text("Recordatorios ⏰")
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = { navController.navigate(route = AppScreen.ListScreen.route) }
-                        ){
-                            Icon(
-                                imageVector = Icons.Filled.DateRange,
-                                contentDescription = "Home"
-                            )
-                        }
-
-                    },
-                    actions = {
-                        Text(
-                            text = "Borrar",
-                            modifier = Modifier.padding(end = 8.dp)
-                            //onClick = { navController.navigate(route = AppScreen.ListScreen.route) }
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Recordatorios ⏰")
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navController.navigate(route = AppScreen.ListScreen.route) }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.DateRange,
+                            contentDescription = "Home"
                         )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors()
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = { navController.navigate(route = AppScreen.FormScreen.route) })
-                {
-                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Add")
-                }
-            }
-        ) { innerPadding ->
-            FirstLayout(
-                modifier = Modifier.padding(innerPadding),
-                navController
+                    }
+
+                },
+                actions = {
+                    Text(
+                        text = "Borrar",
+                        modifier = Modifier.padding(end = 8.dp)
+                        //onClick = { navController.navigate(route = AppScreen.ListScreen.route) }
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors()
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { navController.navigate(route = AppScreen.FormScreen.route) })
+            {
+                Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Add")
+            }
         }
+    ) { innerPadding ->
+        FirstLayout(
+            modifier = Modifier.padding(innerPadding),
+            navController
+        )
+    }
 
 }
 
 @Composable
-fun FirstLayout(modifier: Modifier = Modifier, navController: NavController,viewModel: RecordatorioViewModel = viewModel()) {
+fun FirstLayout(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: RecordatorioViewModel = viewModel(),
+) {
     val recordatorios by viewModel.recordatorios.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.cargarRecordatorios()
@@ -118,7 +120,8 @@ fun FirstLayout(modifier: Modifier = Modifier, navController: NavController,view
     LazyColumn(modifier = modifier.padding(horizontal = 16.dp)) {
         items(recordatorios.size) { recordatorio ->
             Log.d("Recordatorio", recordatorios[recordatorio].toString())
-            RecordatorioCard(recordatorio = recordatorios[recordatorio],
+            RecordatorioCard(
+                recordatorio = recordatorios[recordatorio],
                 onClick = {
                     navController.navigate(AppScreen.FormScreen.createRoute(recordatorios[recordatorio].id))
                 }
