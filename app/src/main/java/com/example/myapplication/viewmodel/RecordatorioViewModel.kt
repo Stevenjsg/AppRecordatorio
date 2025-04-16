@@ -3,8 +3,8 @@ package com.example.myapplication.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.data.AppDatabase
-import com.example.myapplication.data.Recordatorio
+import com.example.myapplication.data.room.AppDatabase
+import com.example.myapplication.data.room.Recordatorio
 import com.example.myapplication.repository.RecordatorioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -3,6 +3,7 @@
 package com.example.myapplication.screen
 
 import android.util.Log
+import com.example.myapplication.R
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -30,13 +32,13 @@ import com.example.myapplication.viewmodel.RecordatorioViewModel
 
 @Composable
 fun ListScreen(navController: NavController) {
-
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Recordatorios ⏰")
+                    Text("${context.getString(R.string.app_name)} ⏰")
                 },
                 navigationIcon = {
                     IconButton(
@@ -51,7 +53,7 @@ fun ListScreen(navController: NavController) {
                 },
                 actions = {
                     Text(
-                        text = "Borrar",
+                        text =" ${context.getString(R.string.eliminar)}",
                         modifier = Modifier.padding(end = 8.dp)
                         //onClick = { navController.navigate(route = AppScreen.ListScreen.route) }
                     )

@@ -1,7 +1,7 @@
 package com.example.myapplication.repository
 
-import com.example.myapplication.data.Recordatorio
-import com.example.myapplication.data.RecordatorioDao
+import com.example.myapplication.data.room.Recordatorio
+import com.example.myapplication.data.room.RecordatorioDao
 
 class RecordatorioRepository(private val dao: RecordatorioDao) {
 

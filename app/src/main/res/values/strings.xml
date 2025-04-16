@@ -1,3 +1,32 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">LoopMind</string>
+
+    <!-- Pantalla Principal -->
+    <string name="titulo">Título</string>
+    <string name="guardar">Guardar</string>
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="confirmar">Confirmar</string>
+
+    <!-- Tipos de recordatorio -->
+    <string name="tipo">Tipo</string>
+    <string name="tipo_agua">Agua</string>
+    <string name="tipo_ayuno">Ayuno</string>
+    <string name="tipo_suplemento">Suplemento</string>
+    <string name="tipo_otro">Otro</string>
+
+    <!-- Formularios -->
+    <string name="nuevo_recordatorio">Nuevo Recordatorio</string>
+    <string name="editar_recordatorio">Editar Recordatorio</string>
+    <string name="intervalo_horas">Cada</string>
+    <string name="horas_ayuno">Ayuno</string>
+    <string name="horas_comida">Comida</string>
+    <string name="ultima_hora">Inicio</string>
+    <string name="proxima_hora">Siguiente</string>
+    <string name="activo">Activo</string>
+
+    <!-- Validaciones -->
+    <string name="error_titulo_vacio">Por favor, ingresa un título</string>
+    <string name="error_tipo_vacio">Selecciona un tipo</string>
+    <string name="error_intervalo_invalido">Intervalo inválido</string>
 </resources>

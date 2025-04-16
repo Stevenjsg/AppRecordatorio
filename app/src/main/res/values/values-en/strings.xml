@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">LoopMind</string>
+
+    <!-- Main screen -->
+    <string name="titulo">Title</string>
+    <string name="guardar">Save</string>
+    <string name="editar">Edit</string>
+    <string name="eliminar">Delete</string>
+    <string name="confirmar">Confirm</string>
+
+    <!-- Reminder types -->
+    <string name="tipo">Type</string>
+    <string name="tipo_agua">Water</string>
+    <string name="tipo_ayuno">Fasting</string>
+    <string name="tipo_suplemento">Supplement</string>
+    <string name="tipo_otro">Other</string>
+
+    <!-- Forms -->
+    <string name="intervalo_horas">Interval in hours</string>
+    <string name="horas_ayuno">Fasting hours</string>
+    <string name="horas_comida">Eating hours</string>
+    <string name="activo">Active</string>
+
+    <!-- Validations -->
+    <string name="error_titulo_vacio">Please enter a title</string>
+    <string name="error_tipo_vacio">Please select a type</string>
+    <string name="error_intervalo_invalido">Invalid interval</string>
+</resources>
