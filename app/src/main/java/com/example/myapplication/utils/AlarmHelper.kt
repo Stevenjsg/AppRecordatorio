@@ -15,12 +15,14 @@ fun programarNotificacion(
     triggerTimeMillis: Long,
     titulo: String,
     mensaje: String,
-    requestCode: Int = 0,
+    requestCode: Int ,
 ) {
     val intent = Intent(context, AlarmReceiver::class.java).apply {
+        putExtra("recordatorioId", requestCode) // 👈 ESTE ES EL CLAVE
         putExtra("titulo", titulo)
         putExtra("mensaje", mensaje)
     }
+
 
     val pendingIntent = PendingIntent.getBroadcast(
         context,
@@ -60,3 +62,16 @@ fun programarNotificacion(
     }
 }
 
+fun cancelarNotificacionProgramada(context: Context, requestCode: Int) {
+    val intent = Intent(context, AlarmReceiver::class.java)
+
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        requestCode,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarmManager.cancel(pendingIntent)
+}

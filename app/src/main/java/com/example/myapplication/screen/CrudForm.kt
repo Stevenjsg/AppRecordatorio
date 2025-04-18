@@ -1,10 +1,7 @@
 package com.example.myapplication.screen
 
 import android.content.Context
-import android.os.Build
-import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,7 +46,6 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormCrud(navController: NavController, id: Int? = null) {
@@ -90,7 +86,6 @@ fun FormCrud(navController: NavController, id: Int? = null) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BodyCrud(
@@ -193,15 +188,15 @@ fun BodyCrud(
                     return@Button
                 }
 
-                // 🕓 Hora actual y cálculo de proximaHora
+                // 🔁 Hora actual y próxima
                 val ahora = LocalTime.now()
                 val formatoHora = DateTimeFormatter.ofPattern("HH:mm")
-
-                val proximaHora = ahora.plusHours(
+                val proxima = ahora.plusHours(
                     if (tipo == "ayuno") horasAyuno.toLongOrNull() ?: 0
                     else intervaloHoras.toLongOrNull() ?: 0
                 ).format(formatoHora)
 
+                // ✅ Crea el recordatorio
                 val recordatorio = Recordatorio(
                     id = id ?: 0,
                     titulo = titulo,
@@ -210,32 +205,41 @@ fun BodyCrud(
                     horasAyuno = if (tipo == "ayuno") horasAyuno.toIntOrNull() else null,
                     horasComida = if (tipo == "ayuno") horasComida.toIntOrNull() else null,
                     ultimaHora = ahora.format(formatoHora),
-                    proximaHora = proximaHora,
+                    proximaHora = proxima,
                     activo = activo
                 )
 
                 if (id != null) {
+                    // 🟡 Modo edición
                     viewModel.update(recordatorio)
+                    programarNotificacion(
+                        context,
+                        horaAFechaEnMillis(proxima),
+                        "Recordatorio: ${recordatorio.titulo}",
+                        "¿Ya hiciste tu ${recordatorio.tipo}?",
+                        requestCode = recordatorio.id
+                    )
+                    navController.navigate(route = AppScreen.ListScreen.route)
                 } else {
-                    viewModel.guardar(recordatorio)
+                    // 🟢 Modo creación
+                    viewModel.guardar(recordatorio) { idGenerado ->
+                        programarNotificacion(
+                            context,
+                            horaAFechaEnMillis(proxima),
+                            "Recordatorio: ${recordatorio.titulo}",
+                            "¿Ya hiciste tu ${recordatorio.tipo}?",
+                            requestCode = idGenerado
+                        )
+                        navController.navigate(route = AppScreen.ListScreen.route)
+                    }
                 }
-
-                // ✅ Programar notificación
-                val triggerTime = horaAFechaEnMillis(proximaHora)
-                programarNotificacion(
-                    context = context,
-                    triggerTimeMillis = triggerTime,
-                    titulo = "Recordatorio: $titulo",
-                    mensaje = "¿Ya completaste tu $tipo?",
-                    requestCode = recordatorio.id
-                )
-
-                navController.navigate(route = AppScreen.ListScreen.route)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(context.getString(R.string.guardar))
         }
+
+
 
     }
 }

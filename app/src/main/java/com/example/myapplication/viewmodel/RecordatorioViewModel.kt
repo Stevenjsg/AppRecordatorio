@@ -6,47 +6,47 @@ import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.room.AppDatabase
 import com.example.myapplication.data.room.Recordatorio
 import com.example.myapplication.repository.RecordatorioRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RecordatorioViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val dao = AppDatabase.Companion.getDatabase(application).recordatorioDao()
+    private val dao = AppDatabase.getDatabase(application).recordatorioDao()
     private val repository = RecordatorioRepository(dao)
 
-    private val _recordatorios = MutableStateFlow<List<Recordatorio>>(emptyList())
-    val recordatorios: StateFlow<List<Recordatorio>> = _recordatorios
+    // ✅ Exposición directa de los recordatorios como StateFlow
+    val recordatorios: StateFlow<List<Recordatorio>> =
+        repository.recordatorios.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
 
-    fun cargarRecordatorios() {
+    fun guardar(recordatorio: Recordatorio, onIdGenerado: (Int) -> Unit = {}) {
         viewModelScope.launch {
-            _recordatorios.value = repository.getAll()
+            val idGenerado = repository.insert(recordatorio)
+            onIdGenerado(idGenerado.toInt())
         }
     }
 
-    fun guardar(recordatorio: Recordatorio) {
-        viewModelScope.launch {
-            repository.insert(recordatorio)
-            cargarRecordatorios() // refrescar
-        }
-    }
     fun update(recordatorio: Recordatorio) {
         viewModelScope.launch {
             repository.update(recordatorio)
-            cargarRecordatorios() // refrescar
         }
     }
-    fun delete(recordatorio: Recordatorio) {
-        viewModelScope.launch {
-            repository.delete(recordatorio)
-            cargarRecordatorios() // refrescar
 
+    fun eliminar(recordatorios: List<Recordatorio>) {
+        viewModelScope.launch {
+            repository.eliminar(recordatorios)
         }
     }
+
     fun obtenerPorId(id: Int, onSuccess: (Recordatorio?) -> Unit) {
-            viewModelScope.launch {
-                val resultado = repository.getById(id)
-                onSuccess(resultado)
-            }
+        viewModelScope.launch {
+            val resultado = repository.getById(id)
+            onSuccess(resultado)
         }
     }
+}

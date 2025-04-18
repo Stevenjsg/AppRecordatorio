@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -28,11 +30,19 @@ import com.example.myapplication.data.obtenerMapaTipos
 import com.example.myapplication.data.room.Recordatorio
 
 @Composable
-fun RecordatorioCard(recordatorio: Recordatorio, onClick: () -> Unit = {}) {
+fun RecordatorioCard(
+    recordatorio: Recordatorio,
+    onClick: () -> Unit = {},
+    modoSeleccion: Boolean = false,
+    seleccionado: Boolean = false,
+    onSeleccionar: (Boolean) -> Unit = {},
+    updateActivo: (Boolean) -> Unit = {}
+) {
     val context = LocalContext.current
    val mapaTipos  = remember { obtenerMapaTipos(context) }
 
-    val (nombreTipo, icono) = mapaTipos[recordatorio.tipo] ?: mapaTipos["otro"]!!
+
+    val (_, icono) = mapaTipos[recordatorio.tipo] ?: mapaTipos["otro"]!!
 
     Card(
         modifier = Modifier
@@ -48,21 +58,34 @@ fun RecordatorioCard(recordatorio: Recordatorio, onClick: () -> Unit = {}) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("$icono  ${recordatorio.titulo}",fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-                Switch(
-                    checked = recordatorio.activo,
-                    onCheckedChange = { nuevoEstado ->
-                        // Aquí llamas a tu lógica de actualización, por ejemplo:
-                        // onToggleEstado(recordatorio.copy(activo = nuevoEstado))
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        uncheckedThumbColor = Color.White,
-                        checkedTrackColor = Color(0xFF4CAF50),
-                        uncheckedTrackColor = Color(0xFFF44336)
-                    ),
-                    modifier = Modifier.scale(0.75f) // Reduce el tamaño
+                Text(
+                    "$icono  ${recordatorio.titulo}",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
                 )
+                if (modoSeleccion) {
+                    Checkbox(
+                        checked = seleccionado,
+                        onCheckedChange = { onSeleccionar(it) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }else{
+                    Switch(
+                        checked = recordatorio.activo,
+                        onCheckedChange = { nuevoEstado ->
+                            updateActivo(!recordatorio.activo)
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            uncheckedThumbColor = Color.White,
+                            checkedTrackColor = Color(0xFF4CAF50),
+                            uncheckedTrackColor = Color(0xFFF44336)
+                        ),
+                        modifier = Modifier.scale(0.75f) // Reduce el tamaño
+                    )
+                }
+
             }
 
 

@@ -1,11 +1,11 @@
 package com.example.myapplication.utils
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -15,7 +15,8 @@ import com.example.myapplication.alarm.IgnorarReceiver
 
 object NotificationHelper {
 
-    fun mostrarNotificacion(context: Context, titulo: String, mensaje: String, id: Int = 1) {
+    fun mostrarNotificacion(context: Context, titulo: String, mensaje: String, id: Int ) {
+        Log.d("NotificationHelper", "Mostrando notificación con ID: $id")
         // ✅ Verificación del permiso en Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val tienePermiso = ContextCompat.checkSelfPermission(

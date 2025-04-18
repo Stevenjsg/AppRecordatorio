@@ -1,37 +1,48 @@
-# ✅ Lista de Tareas - App de Recordatorios
+# 🗺️ Mapa de Ruta - App de Recordatorios
 
-## 🔴 Prioridad Alta
+## ✅ Completado
 
-- [ ] **Validación de datos en el formulario de creación/edición**
-  - Verificar campos obligatorios como título, tipo, horas, etc.
-  - Mostrar errores en los campos si están vacíos o mal formateados.
-  - Prevenir el guardado de recordatorios incompletos.
+- [x] Estructura del proyecto con Jetpack Compose
+- [x] Data class `Recordatorio` con soporte para distintos tipos (agua, ayuno, suplemento, otro)
+- [x] Formulario para crear y editar recordatorios
+- [x] Validación de campos del formulario
+- [x] Input de horas con `TimePickerDialog`
+- [x] Base de datos con Room (DAO, entidad, repositorio)
+- [x] Uso de Flow con Room para actualización en tiempo real
+- [x] Mostrar recordatorios en tarjetas (Card)
+- [x] Filtro visual con badges (LazyRow) por tipo
+- [x] Soporte para editar recordatorios
+- [x] Eliminación múltiple con selección visual
+- [x] Programar notificaciones con AlarmManager
+- [x] Configuración de NotificationChannel
+- [x] Manejo de permisos de notificación (Android 13+)
+- [x] Notificaciones con acciones: "Hecho" / "Ignorar"
+- [x] Confirmar recordatorio desde la notificación (ConfirmarReceiver)
+- [x] Actualizar `ultimaHora` y `proximaHora` automáticamente
+- [x] Cancelar la notificación al confirmar
+- [x] Reprogramar la próxima notificación automáticamente
+- [x] Actualización automática de la UI con StateFlow y collectAsState()
 
-- [ ] **Eliminar recordatorios**
-  - Activar modo de selección múltiple desde un botón en el `TopAppBar`.
-  - Mostrar `Checkbox` en cada card.
-  - Cambiar el color del botón de eliminar cuando hay al menos una card seleccionada.
-  - Eliminar todos los seleccionados al confirmar.
+---
 
-- [ ] **Diseño mejorado para input de hora (como la app de reloj)**
-  - Reemplazar `OutlinedTextField` por un `TimePicker` moderno.
-  - Facilitar la selección de horas para los campos necesarios.
+## 🔧 En progreso / pendientes
 
-## 🟡 Prioridad Media
+- [ ] Implementar `IgnorarReceiver` (cierra notificación sin actualizar)
+- [ ] Validar lógica avanzada de repetición para ayuno (ayuno y ventana de comida)
+- [ ] Soporte para `SCHEDULE_EXACT_ALARM` (Android 12+)
+- [ ] Traducción e internacionalización usando `strings.xml`
+- [ ] Mostrar estado visual (activo/inactivo) con iconos más discretos
+- [ ] Rediseño visual más limpio (tema, iconos, animaciones)
+- [ ] Implementar backup y restauración de recordatorios
+- [ ] Historial o estadísticas de cumplimiento
+- [ ] Notificación persistente si no se confirma
 
-- [ ] **Notificaciones cuando llegue la próxima hora del recordatorio**
-  - Programar alarmas/notifications locales con `WorkManager` o `AlarmManager`.
-  - Mostrar la notificación al llegar la hora del recordatorio.
+---
 
-- [ ] **Confirmación del recordatorio tras notificación**
-  - Notificación debe tener acciones: “Sí” o “No”.
-  - Si el usuario confirma:
-    - Actualizar `ultimaHora` con el valor de `proximaHora`.
-    - Calcular nueva `proximaHora` sumando el intervalo definido.
+## 🧠 Ideas futuras
 
-## 🟢 Prioridad Baja / Mejoras futuras
+- [ ] Integración con Google Calendar
+- [ ] Soporte para Wear OS (smartwatch)
+- [ ] Integración con voz (TTS / Google Assistant)
+- [ ] Modo oscuro personalizado
 
-- [ ] Animaciones y transiciones suaves entre pantallas.
-- [ ] Guardar las selecciones recientes del selector de tipo para usarlas como predeterminadas.
-- [ ] Modo oscuro opcional.
-- [ ] Sincronización con la nube (para respaldos).
