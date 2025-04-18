@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -41,14 +41,21 @@ android {
 }
 
 dependencies {
-    implementation("androidx.navigation:navigation-compose:2.8.9")
-    implementation("androidx.compose.material3:material3:1.2.0")
 
-    implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation(libs.androidx.material) // o versión actual que uses
+    implementation(libs.androidx.activity.compose.v182)
+    implementation(libs.ui)
+    implementation(libs.androidx.appcompat) // Necesario para TimePickerDialog
 
-// Para corrutinas:
-    implementation ("androidx.room:room-ktx:2.6.1")
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.material3)
+
+    implementation (libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler.v250)
+
+
+    implementation (libs.androidx.room.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

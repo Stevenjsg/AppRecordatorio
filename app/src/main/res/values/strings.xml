@@ -13,6 +13,7 @@
     <string name="tipo_agua">Agua</string>
     <string name="tipo_ayuno">Ayuno</string>
     <string name="tipo_suplemento">Suplemento</string>
+    <string name="tipo_pomodoro">Pomodoro</string>
     <string name="tipo_otro">Otro</string>
 
     <!-- Formularios -->
@@ -24,6 +25,8 @@
     <string name="ultima_hora">Inicio</string>
     <string name="proxima_hora">Siguiente</string>
     <string name="activo">Activo</string>
+    <string name="hecho">Hecho</string>
+    <string name="ignorar">Ignorar</string>
 
     <!-- Validaciones -->
     <string name="error_titulo_vacio">Por favor, ingresa un título</string>

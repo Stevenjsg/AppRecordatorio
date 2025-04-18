@@ -2,11 +2,14 @@
 
 package com.example.myapplication.screen
 
+import android.os.Build
 import android.util.Log
-import com.example.myapplication.R
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,18 +24,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapplication.R
 import com.example.myapplication.navigation.AppScreen
+import com.example.myapplication.ui.theme.BadgeType
 import com.example.myapplication.ui.theme.RecordatorioCard
 import com.example.myapplication.viewmodel.RecordatorioViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ListScreen(navController: NavController) {
+fun ListScreen(
+    navController: NavController,
+    viewModel: RecordatorioViewModel = viewModel()
+) {
     val context = LocalContext.current
+    val recordatorios by viewModel.recordatorios.collectAsState()
+    var filtroSeleccionado by remember { mutableStateOf<String?>(null) }
+
+    val listaFiltrada = if (filtroSeleccionado != null) {
+        Log.d("con Filtro ", filtroSeleccionado.toString())
+
+        recordatorios.filter { it.tipo == filtroSeleccionado }
+    } else {
+        Log.d("sin Filtro ", filtroSeleccionado.toString())
+         recordatorios
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.cargarRecordatorios()
+
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -53,7 +81,7 @@ fun ListScreen(navController: NavController) {
                 },
                 actions = {
                     Text(
-                        text =" ${context.getString(R.string.eliminar)}",
+                        text = " ${context.getString(R.string.eliminar)}",
                         modifier = Modifier.padding(end = 8.dp)
                         //onClick = { navController.navigate(route = AppScreen.ListScreen.route) }
                     )
@@ -68,64 +96,43 @@ fun ListScreen(navController: NavController) {
             }
         }
     ) { innerPadding ->
-        FirstLayout(
-            modifier = Modifier.padding(innerPadding),
-            navController
-        )
+        Column(
+            modifier = Modifier.padding(innerPadding)
+        ) {
+
+            BadgeType(
+                recordatorios,
+                onFiltroSeleccionado = { filtroSeleccionado = it },
+                tipoSeleccionado = filtroSeleccionado,
+                context
+            )
+
+
+
+            FirstLayout(
+                listaFiltrada,
+                navController
+            )
+        }
+
+
     }
 
 }
 
 @Composable
 fun FirstLayout(
-    modifier: Modifier = Modifier,
-    navController: NavController,
-    viewModel: RecordatorioViewModel = viewModel(),
+    recordatorios: List<com.example.myapplication.data.room.Recordatorio>,
+    navController: NavController
 ) {
-    val recordatorios by viewModel.recordatorios.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.cargarRecordatorios()
 
-    }
-//    val Mockedrecordatorios = listOf(
-//        Recordatorio(
-//            id = 1,
-//            titulo = "Beber agua",
-//            intervaloHoras = 8,
-//            ultimaHora = "06:00",
-//            proximaHora = "14:00",
-//            tipo = "agua",
-//            activo = true
-//        ),
-//        Recordatorio(
-//            id = 2,
-//            titulo = "Ayuno 16/8",
-//            intervaloHoras = 0, // no se usa aquí
-//            ultimaHora = "20:00",
-//            proximaHora = "12:00",
-//            tipo = "ayuno",
-//            activo = true,
-//            horasAyuno = 16,
-//            horasComida = 8
-//        ),
-//        Recordatorio(
-//            id = 3,
-//            titulo = "Suplemento de Omega 3",
-//            intervaloHoras = 12,
-//            ultimaHora = "08:00",
-//            proximaHora = "20:00",
-//            tipo = "suplemento",
-//            activo = false
-//        )
-//    )
-
-    LazyColumn(modifier = modifier.padding(horizontal = 16.dp)) {
-        items(recordatorios.size) { recordatorio ->
-            Log.d("Recordatorio", recordatorios[recordatorio].toString())
+    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+        items(recordatorios) { recordatorio ->
+            Log.d("Recordatorio", recordatorio.toString())
             RecordatorioCard(
-                recordatorio = recordatorios[recordatorio],
+                recordatorio = recordatorio,
                 onClick = {
-                    navController.navigate(AppScreen.FormScreen.createRoute(recordatorios[recordatorio].id))
+                    navController.navigate(AppScreen.FormScreen.createRoute(recordatorio.id))
                 }
             )
         }

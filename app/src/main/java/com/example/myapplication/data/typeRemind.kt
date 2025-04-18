@@ -9,6 +9,7 @@ fun obtenerMapaTipos(context: Context): Map<String, Pair<String, String>> {
         "agua" to (context.getString(R.string.tipo_agua) to "🥤"),
         "ayuno" to (context.getString(R.string.tipo_ayuno) to "⏳"),
         "suplemento" to (context.getString(R.string.tipo_suplemento) to "💊"),
+        "pomodoro" to (context.getString(R.string.tipo_pomodoro) to "🍅"),
         "otro" to (context.getString(R.string.tipo_otro) to "🔔")
     )
 }
